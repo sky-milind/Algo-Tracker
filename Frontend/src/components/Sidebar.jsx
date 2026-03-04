@@ -1,11 +1,12 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { Home, TrendingUp, Users, BarChart3, Settings, LogOut, X } from 'lucide-react';
+import { getUser, removeUser } from '../utils/auth';
+import { logout as logoutAPI } from '../API/authAPI';
 
 const Sidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const user = getUser();
 
   const menuItems = [
     {
@@ -35,9 +36,17 @@ const Sidebar = ({ isOpen, onClose }) => {
     }
   ];
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      // Call logout API to clear server-side cookie
+      await logoutAPI();
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      // Clear client-side storage regardless of API success
+      removeUser();
+      navigate('/login');
+    }
   };
 
   const handleLinkClick = () => {
@@ -80,12 +89,12 @@ const Sidebar = ({ isOpen, onClose }) => {
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
             <span className="text-sm font-semibold">
-              {user?.name?.charAt(0) || 'U'}
+              {user?.full_name?.charAt(0) || user?.username?.charAt(0) || 'U'}
             </span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">{user?.name || 'User'}</p>
-            <p className="text-xs text-gray-400 truncate">{user?.email || ''}</p>
+            <p className="text-sm font-medium truncate">{user?.full_name || 'User'}</p>
+            <p className="text-xs text-gray-400 truncate">{user?.role || ''}</p>
           </div>
         </div>
       </div>

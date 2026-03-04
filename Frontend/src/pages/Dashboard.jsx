@@ -192,7 +192,6 @@ const Dashboard = () => {
             changeType="neutral"
             icon={<span className="text-2xl">🔄</span>}
           />
-          
         </div>
 
         {/* Top Traders Section */}
@@ -230,7 +229,7 @@ const Dashboard = () => {
                   <p className="font-semibold text-gray-900">GBP/USD</p>
                   <p className="text-sm text-gray-600">High Volume</p>
                 </div>
-                <div className="text-right">
+                <div className="text-right">  
                   <p className="font-bold text-gray-900">1.2615</p>
                   <p className="text-sm text-red-600">-0.08%</p>
                 </div>

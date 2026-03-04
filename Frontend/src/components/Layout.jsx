@@ -1,22 +1,13 @@
 import { useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { isAuthenticated } from '../utils/auth';
 import Sidebar from '../components/Sidebar';
 import { Menu } from 'lucide-react';
 
 const Layout = () => {
-  const { isAuthenticated, loading } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg text-gray-600">Loading...</div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
+  if (!isAuthenticated()) {
     return <Navigate to="/login" replace />;
   }
 
