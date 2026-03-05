@@ -26,19 +26,6 @@ CREATE TABLE IF NOT EXISTS `admin` (
   FOREIGN KEY (`created_by`) REFERENCES `superadmin`(`id`) ON DELETE SET NULL
 );
 
--- User Sessions Table (for tracking login/logout events)
-CREATE TABLE IF NOT EXISTS `user_sessions` (
-  `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `user_id` INT NOT NULL,
-  `user_type` ENUM('superadmin', 'admin', 'user') NOT NULL,
-  `event_type` ENUM('login', 'logout') NOT NULL,
-  `ip_address` VARCHAR(50),
-  `meta` TEXT,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  INDEX `idx_user_session` (`user_id`, `user_type`),
-  INDEX `idx_created_at` (`created_at`)
-);
-
 -- Insert default superadmin
 INSERT INTO `superadmin` (`full_name`, `username`, `password`, `role`) 
 VALUES ('Super Admin', 'superadmin', 'admin123', 'superadmin');

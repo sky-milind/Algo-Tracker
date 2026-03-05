@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import routes from './routes';
+import routesConfig from './Routing/AppRoutes';
 
 function App() {
   const renderRoutes = (routes) => {
@@ -18,7 +18,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {renderRoutes(routes)}
+        {renderRoutes(routesConfig)}
       </Routes>
     </BrowserRouter>
   );
