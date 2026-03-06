@@ -43,12 +43,21 @@ const getAdminById = async (req, res) => {
 // Create new admin (by superadmin)
 const createAdmin = async (req, res) => {
   try {
-    const { full_name, username, password, created_by } = req.body;
+    const { full_name, username, email, password, created_by, status } = req.body;
 
-    if (!full_name || !username || !password || !created_by) {
+    if (!full_name || !username || !email || !password || !created_by) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide full_name, username, password, and created_by'
+        message: 'Please provide full_name, username, email, password, and created_by'
+      });
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid email format'
       });
     }
 
@@ -68,6 +77,13 @@ const createAdmin = async (req, res) => {
       data: { id }
     });
   } catch (error) {
+    // Handle duplicate email error
+    if (error.code === 'ER_DUP_ENTRY') {
+      return res.status(400).json({
+        success: false,
+        message: 'Email already exists'
+      });
+    }
     res.status(500).json({
       success: false,
       message: 'Error creating admin',
@@ -79,13 +95,24 @@ const createAdmin = async (req, res) => {
 // Update admin
 const updateAdmin = async (req, res) => {
   try {
-    const { full_name, username, password } = req.body;
+    const { full_name, username, email } = req.body;
 
-    if (!full_name || !username) {
+    if (!full_name || !username || !email) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide full_name and username'
+        message: 'Please provide full_name, username, and email'
       });
+    }
+
+    // Validate email format if email is provided
+    if (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid email format'
+        });
+      }
     }
 
     const affectedRows = await Admin.update(req.params.id, req.body);

@@ -4,3 +4,6 @@ export { default as TradeTable } from './TradeTable';
 export { default as TradeStatusBadge } from './TradeStatusBadge';
 export { default as UserStatsCard } from './UserStatsCard';
 export { default as FilterBar } from './FilterBar';
+export { default as Button } from './Button';
+export { default as InputField } from './InputField';
+export { default as Modal } from './Modal';

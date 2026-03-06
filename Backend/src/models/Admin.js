@@ -3,13 +3,13 @@ const db = require('../config/database');
 class Admin {
   // Get all admins
   static async getAll() {
-    const [rows] = await db.query('SELECT id, full_name, username, role, created_by, created_at, updated_at FROM admin');
+    const [rows] = await db.query('SELECT id, full_name, username, email, role, status, created_by, created_at, updated_at FROM admin');
     return rows;
   }
 
   // Get admin by ID
   static async getById(id) {
-    const [rows] = await db.query('SELECT id, full_name, username, role, created_by, created_at, updated_at FROM admin WHERE id = ?', [id]);
+    const [rows] = await db.query('SELECT id, full_name, username, email, role, status, created_by, created_at, updated_at FROM admin WHERE id = ?', [id]);
     return rows[0];
   }
 
@@ -21,23 +21,28 @@ class Admin {
 
   // Create new admin
   static async create(data) {
-    const { full_name, username, password, role = 'admin', created_by } = data;
+    const { full_name, username, email, password, role = 'admin', status = 1, created_by } = data;
     const [result] = await db.query(
-      'INSERT INTO admin (full_name, username, password, role, created_by) VALUES (?, ?, ?, ?, ?)',
-      [full_name, username, password, role, created_by]
+      'INSERT INTO admin (full_name, username, email, password, role, status, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [full_name, username, email, password, role, status, created_by]
     );
     return result.insertId;
   }
 
   // Update admin
   static async update(id, data) {
-    const { full_name, username, password } = data;
-    let query = 'UPDATE admin SET full_name = ?, username = ?';
-    let params = [full_name, username];
+    const { full_name, username, email, password, status } = data;
+    let query = 'UPDATE admin SET full_name = ?, username = ?, email = ?';
+    let params = [full_name, username, email];
     
     if (password) {
       query += ', password = ?';
       params.push(password);
+    }
+    
+    if (status !== undefined) {
+      query += ', status = ?';
+      params.push(status);
     }
     
     query += ' WHERE id = ?';
@@ -55,7 +60,7 @@ class Admin {
 
   // Get admins created by specific superadmin
   static async getByCreator(superadminId) {
-    const [rows] = await db.query('SELECT id, full_name, username, role, created_by, created_at, updated_at FROM admin WHERE created_by = ?', [superadminId]);
+    const [rows] = await db.query('SELECT id, full_name, username, email, role, status, created_by, created_at, updated_at FROM admin WHERE created_by = ?', [superadminId]);
     return rows;
   }
 }

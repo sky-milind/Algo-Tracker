@@ -5,6 +5,7 @@ import UserStatsCard from '../components/UserStatsCard';
 import FilterBar from '../components/FilterBar';
 import Card from '../components/Card';
 
+
 const SuperAdminDashboard = () => {
   // Mock data - Replace with actual API calls
   const [filters, setFilters] = useState({
@@ -115,6 +116,7 @@ const SuperAdminDashboard = () => {
     console.log('Filters changed:', newFilters);
   };
 
+
   return (
     <div className="p-8">
       {/* Header */}
@@ -125,6 +127,7 @@ const SuperAdminDashboard = () => {
             <p className="text-sm text-gray-600 mt-1">Superadmin Overview</p>
           </div>
           <div className="flex items-center space-x-4">
+     
             <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
               Export Report
             </button>
@@ -261,6 +264,7 @@ const SuperAdminDashboard = () => {
           </Card>
         </div>
       </div>
+
     </div>
   );
 };
